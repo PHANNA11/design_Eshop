@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:badges/badges.dart';
+import 'package:design_app/models/products_model.dart';
 import 'package:design_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -71,7 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
             // crossAxisSpacing: 2,
             crossAxisCount: 2,
             childAspectRatio: 10 / 15,
-            children: List.generate(7, (index) => ProductCard()),
+            children: List.generate(
+                products.length,
+                (index) => ProductCard(
+                      product: products[index],
+                    )),
           ))
         ],
       ),
