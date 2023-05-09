@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
+  List<ProductModel> filterList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +54,14 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {
+                  filterList = products
+                      .where((element) => element.name.contains(value))
+                      .toList();
+                });
+              },
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.search),
@@ -60,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'Top Selling',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -68,14 +77,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
               child: GridView.count(
-            // mainAxisSpacing: 2,
-            // crossAxisSpacing: 2,
             crossAxisCount: 2,
             childAspectRatio: 10 / 15,
             children: List.generate(
-                products.length,
+                searchController.text.isEmpty || filterList.isEmpty
+                    ? products.length
+                    : filterList.length,
                 (index) => ProductCard(
-                      product: products[index],
+                      product:
+                          searchController.text.isEmpty || filterList.isEmpty
+                              ? products[index]
+                              : filterList[index],
                     )),
           ))
         ],

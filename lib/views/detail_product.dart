@@ -56,7 +56,8 @@ class _DetailProductState extends State<DetailProduct> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 '\$ ${widget.product.price}',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
@@ -90,7 +91,7 @@ class _DetailProductState extends State<DetailProduct> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                children:  [
+                children: [
                   const Text(
                     '1 review',
                     style: TextStyle(fontSize: 17),
@@ -103,16 +104,28 @@ class _DetailProductState extends State<DetailProduct> {
                     Icons.star,
                     color: Colors.red,
                   ),
-                  Text(widget.product.rate.toString(),style: const TextStyle(fontSize: 17),)
+                  Text(
+                    widget.product.rate.toString(),
+                    style: const TextStyle(fontSize: 17),
+                  )
                 ],
               ),
             ),
-           const Card(elevation: 0,child: ListTile(title: Text('Color & Size', style: TextStyle(fontSize: 17)),)),
-           const  Card(elevation: 0,child: ListTile(title: Text('Item Description', style: TextStyle(fontSize: 17)),))
+            const Card(
+                elevation: 0,
+                child: ListTile(
+                  title: Text('Color & Size', style: TextStyle(fontSize: 17)),
+                )),
+            const Card(
+                elevation: 0,
+                child: ListTile(
+                  title:
+                      Text('Item Description', style: TextStyle(fontSize: 17)),
+                ))
           ],
         ),
       ),
-     bottomNavigationBar: Container(
+      bottomNavigationBar: Container(
         height: 60,
         width: double.infinity,
         color: const Color.fromRGBO(33, 150, 243, 1),

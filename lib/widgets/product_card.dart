@@ -11,6 +11,7 @@ class ProductCard extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       child: InkWell(
         onTap: () {
+          // router  page
           Navigator.push(
               context,
               MaterialPageRoute(
