@@ -1,7 +1,9 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:badges/badges.dart';
 import 'package:design_app/models/products_model.dart';
+import 'package:design_app/views/auth/signin_acc_screen.dart';
 import 'package:design_app/widgets/product_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -19,7 +21,25 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const Drawer(),
+      drawer: Drawer(
+        child: SafeArea(
+            child: Column(
+          children: [
+            IconButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance
+                      .signOut()
+                      .whenComplete(() => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignInScreen(),
+                          ),
+                          (route) => false));
+                },
+                icon: const Icon(Icons.logout_outlined)),
+          ],
+        )),
+      ),
       appBar: AppBar(
         title: const Text('E-Shop'),
         centerTitle: true,

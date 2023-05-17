@@ -112,16 +112,17 @@ class _DetailProductState extends State<DetailProduct> {
               ),
             ),
             const Card(
-                elevation: 0,
-                child: ListTile(
-                  title: Text('Color & Size', style: TextStyle(fontSize: 17)),
-                )),
+              elevation: 0,
+              child: ListTile(
+                title: Text('Color & Size', style: TextStyle(fontSize: 17)),
+              ),
+            ),
             const Card(
-                elevation: 0,
-                child: ListTile(
-                  title:
-                      Text('Item Description', style: TextStyle(fontSize: 17)),
-                ))
+              elevation: 0,
+              child: ListTile(
+                title: Text('Item Description', style: TextStyle(fontSize: 17)),
+              ),
+            )
           ],
         ),
       ),

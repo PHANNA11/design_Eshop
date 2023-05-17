@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1239607564",
+    "project_id": "bayon-watchs",
+    "storage_bucket": "bayon-watchs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1239607564:android:4b39e0e4d9a7e1ee68c129",
+        "android_client_info": {
+          "package_name": "com.example.design_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1239607564-74o5vs3muehoupgquh1vqrjasichm61l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.design_app",
+            "certificate_hash": "62c344adc498f36f67e5873590daee6f93ca08d5"
+          }
+        },
+        {
+          "client_id": "1239607564-7bldssli90mrhojbstt80ln2q9sdtctf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_PqT05hzfUf4MZ9moEwtUN7HGPN4gHAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1239607564-7bldssli90mrhojbstt80ln2q9sdtctf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1239607564-vst8g99galjoig6l9hmp9fk3nl1poj6l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.designApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
