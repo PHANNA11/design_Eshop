@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:design_app/views/auth/signup_acc_screen.dart';
 import 'package:design_app/views/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -22,6 +25,20 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
@@ -88,10 +105,11 @@ class _SignInScreenState extends State<SignInScreen> {
                               email: emailController.text,
                               password: passController.text);
                       if (credential != null) {
+                        // ignore: use_build_context_synchronously
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
+                              builder: (context) => const HomeScreen(),
                             ),
                             (route) => false);
                       }
@@ -104,7 +122,45 @@ class _SignInScreenState extends State<SignInScreen> {
                     }
                   }
                 },
-                child: const Text('Sign In'))
+                child: const Text('Sign In')),
+            const SizedBox(
+              height: 50,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () async {
+                      var auth = await signInWithGoogle();
+                      if (auth.credential != null) {
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                            (route) => false);
+                      }
+                    },
+                    child: const CircleAvatar(
+                      child: Image(
+                          image: NetworkImage(
+                              'https://1000logos.net/wp-content/uploads/2016/11/New-Google-Logo.jpg')),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    child: Image(
+                        image: NetworkImage(
+                            'https://1000logos.net/wp-content/uploads/2021/04/Facebook-logo.png')),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
