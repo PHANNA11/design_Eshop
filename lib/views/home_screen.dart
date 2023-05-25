@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:design_app/models/products_model.dart';
 import 'package:design_app/views/auth/signin_acc_screen.dart';
 import 'package:design_app/widgets/product_card.dart';
@@ -18,6 +19,28 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
   List<ProductModel> filterList = [];
+  List<String> docId = [];
+  Future getProduct() async {
+    var pro = await FirebaseFirestore.instance
+        .collection('product')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        setState(() {
+          docId.add(element.reference.id);
+          print(element.reference.id);
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProduct();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
         )),
       ),
       appBar: AppBar(
-        title: const Text('E-Shop'),
+        title: const Text('Beyon Watch'),
         centerTitle: true,
         actions: [
           badges.Badge(
@@ -99,16 +122,45 @@ class _HomeScreenState extends State<HomeScreen> {
               child: GridView.count(
             crossAxisCount: 2,
             childAspectRatio: 10 / 15,
-            children: List.generate(
-                searchController.text.isEmpty || filterList.isEmpty
-                    ? products.length
-                    : filterList.length,
-                (index) => ProductCard(
-                      product:
-                          searchController.text.isEmpty || filterList.isEmpty
-                              ? products[index]
-                              : filterList[index],
-                    )),
+            children: List.generate(docId.length, (index) {
+              CollectionReference dataProduct =
+                  FirebaseFirestore.instance.collection('product');
+              return FutureBuilder<DocumentSnapshot>(
+                future: dataProduct.doc(docId[index]).get(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Icon(
+                        Icons.info,
+                        color: Colors.red,
+                        size: 50,
+                      ),
+                    );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    final data = snapshot.data;
+                    return data == null
+                        ? const Center(
+                            child: Text('No data...!!'),
+                          )
+                        : ProductCard(
+                            product: ProductModel(
+                                code: data['id'],
+                                name: data['name'],
+                                price: double.parse(data['price']),
+                                qty: 1,
+                                rate: double.parse(data['rating']),
+                                discount: 10.0,
+                                desription: 'desription',
+                                image: data['image'],
+                                stockStatus: data['stockStatus']),
+                          );
+                  }
+                },
+              );
+            }),
           ))
         ],
       ),
