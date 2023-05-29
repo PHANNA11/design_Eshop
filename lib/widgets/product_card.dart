@@ -78,7 +78,8 @@ class ProductCard extends StatelessWidget {
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
-                                    color: product.stockStatus == 'INSTOCK'
+                                    color: product.stockStatus.toUpperCase() ==
+                                            'INSTOCK'
                                         ? Colors.green
                                         : Colors.red),
                               ),

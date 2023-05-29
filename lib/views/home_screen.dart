@@ -146,16 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text('No data...!!'),
                           )
                         : ProductCard(
-                            product: ProductModel(
-                                code: data['id'],
-                                name: data['name'],
-                                price: double.parse(data['price']),
-                                qty: 1,
-                                rate: double.parse(data['rating']),
-                                discount: 10.0,
-                                desription: 'desription',
-                                image: data['image'],
-                                stockStatus: data['stockStatus']),
+                            product: ProductModel.fromJson(data),
                           );
                   }
                 },
@@ -163,6 +154,18 @@ class _HomeScreenState extends State<HomeScreen> {
             }),
           ))
         ],
+      ),
+    );
+  }
+
+  Widget buidCard({ProductModel? pro}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        // color: Colors.blue,
+        child: Image(
+            // fit: BoxFit.cover,
+            image: NetworkImage(pro!.image.toString())),
       ),
     );
   }

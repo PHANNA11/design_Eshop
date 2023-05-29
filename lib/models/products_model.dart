@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProductModel {
   late int code;
   late String name;
@@ -18,6 +20,28 @@ class ProductModel {
       required this.desription,
       required this.image,
       required this.stockStatus});
+  Map<String, dynamic> toJson() {
+    return {
+      'id': code,
+      'name': name,
+      'price': price,
+      'qty': qty,
+      'rating': rate,
+      'image': image,
+      'stockStatus': stockStatus,
+      'discount': discount,
+    };
+  }
+
+  ProductModel.fromJson(DocumentSnapshot res)
+      : code = res['id'],
+        name = res['name'],
+        qty = res['qty'],
+        price = double.parse(res['price'].toString()),
+        rate = double.parse(res['rating'].toString()),
+        image = res['image'],
+        stockStatus = res['stockStatus'],
+        discount = double.parse(res['discount'].toString());
 }
 
 List<ProductModel> products = [
