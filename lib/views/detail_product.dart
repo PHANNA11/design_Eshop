@@ -1,18 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:design_app/models/products_model.dart';
+import 'package:design_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class DetailProduct extends StatefulWidget {
-  DetailProduct({super.key, required this.product});
+  DetailProduct({super.key, required this.product, required this.docId});
   ProductModel product;
+  List<String> docId;
+
   @override
   State<DetailProduct> createState() => _DetailProductState();
 }
 
 class _DetailProductState extends State<DetailProduct> {
+  List<String> tempDocId = [];
+  filterProduct() async {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,10 +72,12 @@ class _DetailProductState extends State<DetailProduct> {
               child: Row(
                 children: [
                   FloatingActionButton.small(
+                    heroTag: 'share',
                     onPressed: () {},
                     child: const Icon(Icons.share),
                   ),
                   FloatingActionButton.small(
+                    heroTag: 'fav',
                     onPressed: () {},
                     child: const Icon(Icons.favorite),
                   ),
@@ -112,6 +120,17 @@ class _DetailProductState extends State<DetailProduct> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 80,
+              width: double.infinity,
+              //color: Colors.red,
+              child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: List.generate(
+                      widget.product.subImage.length,
+                      (index) =>
+                          buildSubImage(widget.product.subImage[index]))),
+            ),
             const Card(
               elevation: 0,
               child: ListTile(
@@ -123,7 +142,51 @@ class _DetailProductState extends State<DetailProduct> {
               child: ListTile(
                 title: Text('Item Description', style: TextStyle(fontSize: 17)),
               ),
-            )
+            ),
+            const Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'You may also like',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: GridView.count(
+                  scrollDirection: Axis.horizontal,
+                  crossAxisCount: 1,
+                  childAspectRatio: 20 / 15,
+                  children: List.generate(widget.docId.length, (index) {
+                    CollectionReference dataProduct =
+                        FirebaseFirestore.instance.collection('product');
+                    return FutureBuilder<DocumentSnapshot>(
+                      future: dataProduct.doc(widget.docId[index]).get(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return const Center(
+                            child: Icon(
+                              Icons.info,
+                              color: Colors.red,
+                              size: 50,
+                            ),
+                          );
+                        } else if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else {
+                          final data = snapshot.data;
+                          var pro = ProductModel.fromJson(data!);
+                          return ProductCard(
+                            product: ProductModel.fromJson(data),
+                            docId: widget.docId,
+                          );
+                        }
+                      },
+                    );
+                  }),
+                ))
           ],
         ),
       ),
@@ -162,6 +225,17 @@ class _DetailProductState extends State<DetailProduct> {
                 ))
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildSubImage(String image) {
+    return Card(
+      elevation: 0,
+      child: SizedBox(
+        height: 70,
+        width: 70,
+        child: Image(image: NetworkImage(image)),
       ),
     );
   }

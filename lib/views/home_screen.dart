@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     getProduct();
+    filterList = [];
   }
 
   @override
@@ -98,13 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
               controller: searchController,
-              onChanged: (value) {
-                setState(() {
-                  filterList = products
-                      .where((element) => element.name.contains(value))
-                      .toList();
-                });
-              },
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.search),
@@ -138,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return const Center(child: CircularProgressIndicator());
                   } else {
                     final data = snapshot.data;
                     return data == null
@@ -147,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         : ProductCard(
                             product: ProductModel.fromJson(data),
+                            docId: docId,
                           );
                   }
                 },
@@ -154,18 +149,6 @@ class _HomeScreenState extends State<HomeScreen> {
             }),
           ))
         ],
-      ),
-    );
-  }
-
-  Widget buidCard({ProductModel? pro}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        // color: Colors.blue,
-        child: Image(
-            // fit: BoxFit.cover,
-            image: NetworkImage(pro!.image.toString())),
       ),
     );
   }

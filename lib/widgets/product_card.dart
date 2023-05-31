@@ -3,8 +3,9 @@ import 'package:design_app/views/detail_product.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  ProductCard({super.key, required this.product});
+  ProductCard({super.key, required this.product, required this.docId});
   ProductModel product;
+  List<String> docId;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,7 +16,10 @@ class ProductCard extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => DetailProduct(product: product),
+                builder: (context) => DetailProduct(
+                  product: product,
+                  docId: docId,
+                ),
               ));
         },
         child: Container(
